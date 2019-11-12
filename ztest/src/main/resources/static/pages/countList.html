@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Count</title>
+    <link rel="stylesheet" type="text/css" href="../easyUI/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../easyUI/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../easyUI/demo/demo.css">
+    <script type="text/javascript" src="../easyUI/jquery.min.js"></script>
+    <script type="text/javascript" src="../easyUI/jquery.easyui.min.js"></script>
+</head>
+<body>
+    <h2>Income and expenditure statistics</h2>
+    <div style="margin-bottom: 10px">
+        <span>查询时间：</span>
+        <input class="easyui-datebox" sharedCalendar="#sc" data-options="formatter:myformatter, parser:myparser" />
+        <span>&nbsp~&nbsp</span>
+        <input class="easyui-datebox" sharedCalendar="#sc" data-options="formatter:myformatter, parser:myparser" />
+        <div id="sc" class="easyui-calendar"></div>
+        <a href="javascript:mainFunction()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
+           style="width:80px; margin-left: 7px;">查询</a>
+        <a href="javascript:reset();" class="easyui-linkbutton" data-options="iconCls:'icon-reload'"
+           style="width:80px; margin-left: 7px;">重置</a>
+
+    </div>
+    <table id="dg" class="easyui-datagrid" style="width:700px;height:450px"
+           title="Count Data" data-options="rownumbers:true, singleSelect:true, autoRowHeight:false, pagination:true, pageSize:10">
+        <thead id="thread1">
+        <tr>
+            <th field="id" width="80" hidden = hidden>ID</th>
+            <th field="count_price" width="160" align="left">count_price</th>
+            <th field="count_remark" width="160" align="left">count_remark</th>
+            <th field="create_time" width="200" align="left">create_time</th>
+        </tr>
+        </thead>
+    </table>
+
+
+</body>
+<script type="text/javascript">
+    var pageList;
+    //设置datagrid的初始化
+    $(function() {
+        mainFunction();
+    });
+
+    //主函数
+    function mainFunction() {
+        //获取参数
+        var startDate = $('#_easyui_textbox_input1').next().val();
+        var endDate = $('#_easyui_textbox_input2').next().val();
+        //加载数据
+        if((startDate == null || startDate === '') && (endDate == null || endDate === '')) {
+            SearchTrainee(1, 10); //初始化默认查询首页
+        } else if(!(startDate == null || startDate === '') && !(endDate == null || endDate === '')) {
+            SearchTraineeByDate(startDate, endDate);
+        } else {
+            alert("请输入完整的参数");
+        }
+    }
+
+    //查询函数
+    function SearchTrainee(currentPage, pageSize) {
+        //异步获取数据到javascript对象，入参为查询条件和页码信息
+        $.get('/manager/count/list', {
+            currentPage: currentPage,
+            pageSize: pageSize
+        }, function(data) {
+            pageList = JSON.parse(data);
+            var result = JSON.parse(data).list;
+            var listData = [];
+            for(index in result) {
+                var singleData = {
+                    'id' : result[index].id,
+                    'count_price' : result[index].countPrice,
+                    'count_remark' : result[index].countRemark,
+                    'create_time' : result[index].createTime
+                };
+                listData.push(singleData);
+            }
+            $('#dg').datagrid('loadData', listData);
+            //更改四个功能按钮的触发函数
+            changePageButton();
+        });
+    }
+    //根据时间查询
+    function SearchTraineeByDate(startDate, endDate) {
+        //异步获取数据到javascript对象，入参为查询条件和页码信息
+        $.get('/manager/count/list', {
+            currentPage: 1,
+            pageSize: 10,
+            startDate: startDate,
+            endDate: endDate
+        }, function(data) {
+            pageList = JSON.parse(data);
+            var result = JSON.parse(data).list;
+            var listData = [];
+            for(index in result) {
+                var singleData = {
+                    'id' : result[index].id,
+                    'count_price' : result[index].countPrice,
+                    'count_remark' : result[index].countRemark,
+                    'create_time' : result[index].createTime
+                };
+                listData.push(singleData);
+            }
+            $('#dg').datagrid('loadData', listData);
+            //更改四个功能按钮的触发函数
+            changePageButton();
+        });
+    }
+    //重置
+    function reset() {
+        window.location.replace(location);
+    }
+
+    //更改四个功能按钮的触发函数
+    function changePageButton() {
+        document.getElementsByClassName("l-btn l-btn-small l-btn-plain l-btn-disabled l-btn-plain-disabled")[0]
+            .setAttribute("href","javascript:toFirstPage()");
+        document.getElementsByClassName("l-btn l-btn-small l-btn-plain l-btn-disabled l-btn-plain-disabled")[3]
+            .setAttribute("href","javascript:toLastPage()");
+        document.getElementsByClassName("l-btn l-btn-small l-btn-plain l-btn-disabled l-btn-plain-disabled")[1]
+            .setAttribute("href","javascript:toPreviousPage()");
+        document.getElementsByClassName("l-btn l-btn-small l-btn-plain l-btn-disabled l-btn-plain-disabled")[2]
+            .setAttribute("href","javascript:toNextPage()");
+    }
+    //查询第一页
+    function toFirstPage() {
+        SearchTrainee(pageList.firstPage, 10); //初始化默认查询首页
+    }
+    //查询最后一页
+    function toLastPage() {
+            SearchTrainee(pageList.lastPage, 10); //初始化默认查询首页
+    }
+    //查询上一页
+    function toPreviousPage() {
+        if(pageList.hasPreviousPage) {
+            SearchTrainee(pageList.prePage, 10);
+        }
+    }
+    //查询下一页
+    function toNextPage() {
+        if(pageList.hasNextPage) {
+            SearchTrainee(pageList.nextPage, 10);
+        }
+    }
+
+    //日期格式化函数
+    function myformatter(date) {
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        if(m < 10) {
+            m = '0' + m;
+        }
+        var d = date.getDate();
+        if(d < 10) {
+            d = '0' + d;
+        }
+        return y + "-" + m + "-" + d;
+    }
+    //获取当前选中日期参数
+    function myparser(s) {
+        if (!s) return new Date();
+        var ss = (s.split('-'));
+        var y = parseInt(ss[0],10);
+        var m = parseInt(ss[1],10);
+        var d = parseInt(ss[2],10);
+        if (!isNaN(y) && !isNaN(m) && !isNaN(d)){
+            return new Date(y,m-1,d);
+        } else {
+            return new Date();
+        }
+    }
+
+
+</script>
+</html>

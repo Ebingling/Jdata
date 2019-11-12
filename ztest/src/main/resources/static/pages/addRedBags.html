@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Exam</title>
+    <link rel="stylesheet" type="text/css" href="../easyUI/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../easyUI/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../easyUI/demo/demo.css">
+    <script type="text/javascript" src="../easyUI/jquery.min.js"></script>
+    <script type="text/javascript" src="../easyUI/jquery.easyui.min.js"></script>
+</head>
+<body>
+    <p>login</p>
+    <div class="easyui-panel" title="Ajax Form" style="width:300px;padding:10px;">
+        <form id="ff" method="get" enctype="multipart/form-data">
+            <table>
+                <tr>
+                    <td>Name:</td>
+                    <td><input name="red_sum" class="f1 easyui-textbox"/></td>
+                </tr>
+                <tr>
+                    <td>password:</td>
+                    <td><input name="red_num" class="f1 easyui-textbox"/></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="button" value="Submit" onclick="submitForm()"/></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+</body>
+<script type="text/javascript">
+    function submitForm(){
+        var num = document.getElementsByName("red_num")[0].value;
+        $.ajax({
+            url : "/examController/test1?num=" + num,
+            type : "get",
+            dataType: "json", //数据格式设置为json
+            success: function(result) {
+                console.log(result);
+            },
+            error: function(msg) {
+                console.log(msg);
+                alert(msg.message);
+            }
+        });
+    }
+
+
+</script>
+</html>

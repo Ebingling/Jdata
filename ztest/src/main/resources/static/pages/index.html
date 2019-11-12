@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--<base href="http://localhost:8080/manager/">-->
+    <meta charset="UTF-8">
+    <title>Count</title>
+    <!--<link rel="stylesheet" type="text/css" href="/manager/easyUI/themes/default/easyui.css">-->
+    <link rel="stylesheet" type="text/css" href="/manager/easyUI/themes/default/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="/manager/easyUI/themes/icon.css" />
+    <link rel="stylesheet" type="text/css" href="/manager/easyUI/demo/demo.css" />
+    <script type="text/javascript" src="/manager/easyUI/jquery.min.js"></script>
+    <script type="text/javascript" src="/manager/easyUI/jquery.easyui.min.js"></script>
+</head>
+<body>
+<h2>Basic Panel</h2>
+<p>The panel is a container for other components or elements.</p>
+<div style="padding:5px 0;">
+    <div class="index">
+        <a href="/manager/pages/exam.html" class="easyui-linkbutton" data-options="iconCls:'icon-search'" style="width:80px">Exam</a>
+        <span>&nbsp&nbsp测试随机生成测试题目的接口</span>
+    </div>
+    <div class="index">
+        <a href="/manager/swagger-ui.html#/" class="easyui-linkbutton" data-options="iconCls:'icon-print'" style="width:80px">Test</a>
+        <span>&nbsp&nbsp跳转Swagger接口测试页面</span>
+    </div>
+    <div class="index">
+        <a href="../manager/pages/addRedBags.html" class="easyui-linkbutton" data-options="iconCls:'icon-add'" style="width:80px">Add</a>
+        <span>&nbsp&nbsp测试注册接口</span>
+    </div>
+    <div class="index">
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" style="width:80px">Get</a>
+        <span>&nbsp&nbsp测试领取红包接口</span>
+    </div>
+    <div class="index">
+        <a href="/manager/pages/countList.html" class="easyui-linkbutton" data-options="iconCls:'icon-search'" style="width:80px">Load</a>
+        <span>&nbsp&nbsp进入账单管理</span>
+    </div>
+    <div class="index">
+        <a href="javascript:location.reload();" class="easyui-linkbutton" data-options="iconCls:'icon-reload'" style="width:80px">Reload</a>
+        <span>&nbsp&nbsp刷新页面</span>
+    </div>
+    <div class="index">
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-help'" style="width:80px">Help</a>
+        <span>&nbsp&nbsp帮助</span>
+    </div>
+    <div class="index">
+        <a href="/manager/common/changeLocal" class="easyui-linkbutton"
+           onclick="function f() {
+             alert('一键切换本地数据库');
+           }" data-options="iconCls:'icon-help'" style="width:80px">Help</a>
+        <span>&nbsp&nbsp一键切换本地数据库</span>
+    </div>
+    <div class="index">
+        <a href="/manager/common/changeFar" class="easyui-linkbutton"
+           onclick="function f() {
+              alert('一键切换远程数据库');
+           }" data-options="iconCls:'icon-help'" style="width:80px">Help</a>
+        <span>&nbsp&nbsp一键切换远程数据库</span>
+    </div>
+</div>
+
+</body>
+<style>
+    .index {
+        margin: 5px 5px 5px 5px;
+    }
+
+</style>
+
+</html>

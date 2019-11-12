@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Exam</title>
+    <link rel="stylesheet" type="text/css" href="../easyUI/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../easyUI/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../easyUI/demo/demo.css">
+    <script type="text/javascript" src="../easyUI/jquery.min.js"></script>
+    <script type="text/javascript" src="../easyUI/jquery.easyui.min.js"></script>
+</head>
+<body>
+<h2>Basic Panel</h2>
+<p>ExamPage</p>
+<div id="p" class="easyui-panel" title="Basic Panel" style="width:700px;height:200px;padding:10px;">
+    <ul>
+        <li id = 'l0'></li>
+        <li id = 'l1'></li>
+        <li id = 'l2'></li>
+        <li id = 'l3'></li>
+        <li id = 'l4'></li>
+    </ul>
+</div>
+
+
+</body>
+<script>
+    var ws = new WebSocket("wss://dev.maas.chelaile.net.cn/bus-manager/websocket");
+
+    ws.onopen = function(evt) {
+        console.log("Connection open ...");
+        ws.send("Hello WebSockets!");
+    };
+
+    ws.onmessage = function(evt) {
+        console.log("Received Message: " + evt.data);
+        ws.close();
+    };
+
+    ws.onclose = function(evt) {
+        console.log("Connection closed.");
+    };
+
+    $(function(){
+        $.ajax({
+            url : '/manager/examController/exam',
+            type : 'post',
+            date: {},
+            dataType:'json', //数据格式设置为json
+            success: function (result) {
+                console.log(result);
+                for(var i = 0; i < result.length; i++) {
+                    console.log(result[i]);
+                    $("#l" + i).text(result[i].text);
+                }
+            },
+            error: function() {
+                console.error('error');
+            }
+        });
+    });
+
+
+</script>
+</html>
